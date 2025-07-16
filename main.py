@@ -8,7 +8,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 import asyncio
 # Токен вашего бота
-BOT_TOKEN = "6689311820:AAGXXyVeJVRiRovULG8YrMJV3S1iaQRkPrM"
+BOT_TOKEN = "8098530526:AAFVJ_9ojea8KC1SUJgrRbXzeML3wX2VOjk"
 
 # Инициализация бота и диспетчера
 bot = Bot(token=BOT_TOKEN)
@@ -17,7 +17,7 @@ dp = Dispatcher()
 # Инлайн клавиатура с кнопкой WebApp
 def get_inline_webapp_keyboard():
     builder = InlineKeyboardBuilder()
-    builder.button(text="Открыть Маленький Мук", web_app=WebAppInfo(url="https://xonre.github.io/telegram-mini-app/"))
+    builder.button(text="Открыть Маленький Мук", web_app=WebAppInfo(url="https://xonre.github.io/telegram-mini-app/")) 
     return builder.as_markup()
 
 # Обработчик команды /start
