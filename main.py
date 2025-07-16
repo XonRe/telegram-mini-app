@@ -17,7 +17,7 @@ dp = Dispatcher()
 # Инлайн клавиатура с кнопкой WebApp
 def get_inline_webapp_keyboard():
     builder = InlineKeyboardBuilder()
-    builder.button(text="Открыть Маленький Мук", web_app=WebAppInfo(url="nenotice.online"))
+    builder.button(text="Открыть Маленький Мук", web_app=WebAppInfo(url="https://xonre.github.io/telegram-mini-app/"))
     return builder.as_markup()
 
 # Обработчик команды /start
