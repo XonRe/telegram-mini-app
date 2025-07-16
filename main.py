@@ -1,5 +1,5 @@
 from aiogram import Bot, Dispatcher, types, F
-
+import json
 from aiogram.filters import Command
 
 from aiogram.types import WebAppInfo, ReplyKeyboardMarkup, KeyboardButton
@@ -31,11 +31,27 @@ async def cmd_start(message: types.Message):
     
 
 # Обработчик сообщений с web_app_data
+
 @dp.message(F.content_type == "web_app_data")
 async def handle_web_app_data(message: types.Message):
-    data = message.web_app_data.data
-    await message.answer(f"Получены данные из WebApp: {data}")
-
+    try:
+        data = json.loads(message.web_app_data.data)
+        action = data.get('action')
+        amount = data.get('amount')
+        balance = data.get('balance')
+        
+        if action == 'win':
+            response = f"🎉 Поздравляем! Вы выиграли {amount} ₽\nНовый баланс: {balance} ₽"
+        elif action == 'lose':
+            response = f"😢 К сожалению, вы проиграли {amount} ₽\nНовый баланс: {balance} ₽"
+        elif action == 'cashout':
+            response = f"🤑 Вы забрали {amount} ₽\nНовый баланс: {balance} ₽"
+        else:
+            response = f"Получены данные: {message.web_app_data.data}"
+            
+        await message.answer(response)
+    except json.JSONDecodeError:
+        await message.answer(f"Получены данные: {message.web_app_data.data}")
 
 async def main():
     await dp.start_polling(bot)

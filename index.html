@@ -1,7 +1,390 @@
-  <div id="usercard"> <!--Карта профиля, человека, который к нам обратился-->
-   </div>
-   <p>Just text</p> <!--Просто текст для проверки-->
-   <a class="link" href="https://xonre.github.io/telegram-mini-app/">Link</a> <!--Просто ссылка для проверки-->
-   <p class="hint">Some little hint</p> <!--Просто текст-подсказка для проверки-->
-   <button id="btn" class="button">Show/Hide Main Button</button> <!--Кнопка, чтобы скрыть / показать основную кнопку-->
-   <button id="btnED" class="button">Enable/Disable Main Button</button> <!--Кнопка, чтобы сделать кнопку активной/неактивной-->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Казино-сапер</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 10px;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .header {
+            width: 100%;
+            background-color: #0088cc;
+            color: white;
+            padding: 10px;
+            border-radius: 10px 10px 0 0;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        
+        .balance {
+            width: 100%;
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        .cell {
+            aspect-ratio: 1;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .cell:hover {
+            background-color: #d0d0d0;
+        }
+        
+        .cell.revealed {
+            background-color: #ffffff;
+        }
+        
+        .cell.bomb {
+            background-color: #ff4444;
+            color: white;
+        }
+        
+        .cell.coin {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .controls {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        button {
+            background-color: #0088cc;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        
+        button:hover {
+            background-color: #0077bb;
+        }
+        
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .bet-controls {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .bet-amount {
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            flex-grow: 1;
+            margin: 0 5px;
+        }
+        
+        .result-message {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: none;
+        }
+        
+        .win {
+            background-color: #4CAF50;
+            color: white;
+            display: block;
+        }
+        
+        .lose {
+            background-color: #ff4444;
+            color: white;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎰 Казино-сапер</h1>
+        </div>
+        
+        <div class="balance">
+            Баланс: <span id="balance">1000</span> ₽
+        </div>
+        
+        <div class="bet-controls">
+            <button id="decrease-bet">-</button>
+            <div class="bet-amount">
+                Ставка: <span id="bet-amount">10</span> ₽
+            </div>
+            <button id="increase-bet">+</button>
+        </div>
+        
+        <div class="game-board" id="game-board"></div>
+        
+        <div class="result-message" id="result-message"></div>
+        
+        <div class="controls">
+            <button id="new-game-btn">Новая игра</button>
+            <button id="cash-out-btn">Забрать</button>
+        </div>
+    </div>
+
+    <script>
+        // Инициализация Telegram WebApp
+        const webApp = Telegram.WebApp;
+        webApp.expand();
+        webApp.enableClosingConfirmation();
+        
+        // Игровые переменные
+        let balance = 1000;
+        let currentBet = 10;
+        let gameBoard = [];
+        let revealedCells = 0;
+        let gameOver = false;
+        let cashOutMultiplier = 1;
+        
+        // Элементы DOM
+        const balanceElement = document.getElementById('balance');
+        const betAmountElement = document.getElementById('bet-amount');
+        const gameBoardElement = document.getElementById('game-board');
+        const resultMessageElement = document.getElementById('result-message');
+        const newGameBtn = document.getElementById('new-game-btn');
+        const cashOutBtn = document.getElementById('cash-out-btn');
+        const decreaseBetBtn = document.getElementById('decrease-bet');
+        const increaseBetBtn = document.getElementById('increase-bet');
+        
+        // Инициализация игры
+        function initGame() {
+            gameBoard = [];
+            revealedCells = 0;
+            gameOver = false;
+            cashOutMultiplier = 1;
+            resultMessageElement.style.display = 'none';
+            resultMessageElement.className = 'result-message';
+            
+            // Очищаем игровое поле
+            gameBoardElement.innerHTML = '';
+            
+            // Создаем игровое поле 4x4
+            for (let i = 0; i < 4; i++) {
+                gameBoard[i] = [];
+                for (let j = 0; j < 4; j++) {
+                    // 25% chance for bomb (4 bombs on 16 cells)
+                    gameBoard[i][j] = Math.random() < 0.25 ? 'bomb' : 'coin';
+                    
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.dataset.row = i;
+                    cell.dataset.col = j;
+                    cell.addEventListener('click', () => revealCell(i, j));
+                    
+                    gameBoardElement.appendChild(cell);
+                }
+            }
+            
+            updateUI();
+        }
+        
+        // Открытие клетки
+        function revealCell(row, col) {
+            if (gameOver) return;
+            
+            const cellValue = gameBoard[row][col];
+            const cellElement = document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
+            
+            if (cellElement.classList.contains('revealed')) return;
+            
+            cellElement.classList.add('revealed');
+            revealedCells++;
+            
+            if (cellValue === 'bomb') {
+                // Игрок нашел бомбу - проигрыш
+                cellElement.classList.add('bomb');
+                cellElement.textContent = '💣';
+                endGame(false);
+            } else {
+                // Игрок нашел монету
+                cellElement.classList.add('coin');
+                cellElement.textContent = '💰';
+                cashOutMultiplier += 0.25;
+                updateUI();
+                
+                // Проверка на победу (открыты все безопасные клетки)
+                if (revealedCells === 12) { // 16 total - 4 bombs = 12 coins
+                    endGame(true);
+                }
+            }
+        }
+        
+        // Завершение игры
+        function endGame(isWin) {
+            gameOver = true;
+            
+            // Показываем все бомбы
+            for (let i = 0; i < 4; i++) {
+                for (let j = 0; j < 4; j++) {
+                    if (gameBoard[i][j] === 'bomb') {
+                        const cellElement = document.querySelector(`.cell[data-row="${i}"][data-col="${j}"]`);
+                        cellElement.classList.add('bomb');
+                        cellElement.textContent = '💣';
+                    }
+                }
+            }
+            
+            if (isWin) {
+                const winAmount = Math.floor(currentBet * cashOutMultiplier);
+                balance += winAmount;
+                resultMessageElement.textContent = `Победа! +${winAmount} ₽`;
+                resultMessageElement.classList.add('win');
+                
+                // Отправляем данные о победе в бота
+                webApp.sendData(JSON.stringify({
+                    action: 'win',
+                    amount: winAmount,
+                    balance: balance
+                }));
+            } else {
+                balance -= currentBet;
+                resultMessageElement.textContent = `Проигрыш! -${currentBet} ₽`;
+                resultMessageElement.classList.add('lose');
+                
+                // Отправляем данные о проигрыше в бота
+                webApp.sendData(JSON.stringify({
+                    action: 'lose',
+                    amount: currentBet,
+                    balance: balance
+                }));
+            }
+            
+            resultMessageElement.style.display = 'block';
+            updateUI();
+        }
+        
+        // Забрать деньги
+        function cashOut() {
+            if (gameOver || revealedCells === 0) return;
+            
+            const winAmount = Math.floor(currentBet * (cashOutMultiplier - 0.25)); // Не учитываем текущую клетку
+            balance += winAmount;
+            
+            resultMessageElement.textContent = `Вы забрали ${winAmount} ₽`;
+            resultMessageElement.classList.add('win');
+            resultMessageElement.style.display = 'block';
+            
+            gameOver = true;
+            
+            // Отправляем данные в бота
+            webApp.sendData(JSON.stringify({
+                action: 'cashout',
+                amount: winAmount,
+                balance: balance
+            }));
+            
+            updateUI();
+        }
+        
+        // Обновление интерфейса
+        function updateUI() {
+            balanceElement.textContent = balance;
+            betAmountElement.textContent = currentBet;
+            
+            // Блокируем кнопки, если недостаточно средств
+            if (balance < currentBet) {
+                newGameBtn.disabled = true;
+            } else {
+                newGameBtn.disabled = false;
+            }
+            
+            cashOutBtn.disabled = gameOver || revealedCells === 0;
+            
+            // Блокируем кнопки изменения ставки во время игры
+            const isGameActive = !gameOver && revealedCells > 0;
+            decreaseBetBtn.disabled = currentBet <= 10 || isGameActive;
+            increaseBetBtn.disabled = currentBet >= 1000 || isGameActive;
+        }
+        
+        // Изменение ставки
+        function changeBet(amount) {
+            if (gameOver || revealedCells === 0) {
+                currentBet += amount;
+                
+                // Ограничения ставки
+                if (currentBet < 10) currentBet = 10;
+                if (currentBet > 1000) currentBet = 1000;
+                if (currentBet > balance) currentBet = balance;
+                
+                updateUI();
+            }
+        }
+        
+        // Обработчики событий
+        newGameBtn.addEventListener('click', () => {
+            if (balance >= currentBet) {
+                initGame();
+            }
+        });
+        
+        cashOutBtn.addEventListener('click', cashOut);
+        
+        decreaseBetBtn.addEventListener('click', () => changeBet(-10));
+        increaseBetBtn.addEventListener('click', () => changeBet(10));
+        
+        // Запуск игры при загрузке
+        initGame();
+    </script>
+</body>
+</html>
