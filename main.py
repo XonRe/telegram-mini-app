@@ -5,10 +5,12 @@ from aiogram.filters import Command
 from aiogram.types import WebAppInfo, ReplyKeyboardMarkup, KeyboardButton
 
 from aiogram.utils.keyboard import InlineKeyboardBuilder
-
+from dotenv import load_dotenv
 import asyncio
+import os
 # Токен вашего бота
-BOT_TOKEN = "8098530526:AAFVJ_9ojea8KC1SUJgrRbXzeML3wX2VOjk"
+load_dotenv()
+BOT_TOKEN = os.getenv('telebot')
 
 # Инициализация бота и диспетчера
 bot = Bot(token=BOT_TOKEN)
