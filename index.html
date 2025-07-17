@@ -7,29 +7,37 @@
   <link rel="stylesheet" href="style.css">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap');
+    
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('https://raw.githubusercontent.com/XonRe/telegram-mini-app/main/images/header-bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      height: 100vh;
+      font-family: 'Montserrat', sans-serif;
+    }
   </style>
 </head>
 <body>
-  <div class="main-container">
-    <header class="main-header">
+  <div class="overlay">
+    <header>
       <h1>МАЛЕНЬКИЙ МУК</h1>
     </header>
 
-    <div class="cta-button">
-      <button onclick="location.href='category.html'">начать выбирать товары</button>
-    </div>
+    <div class="content">
+      <button class="cta-button" onclick="location.href='category.html'">
+        начать выбирать товары
+      </button>
 
-    <!-- ТОП-товары -->
-    <div class="featured-products">
-      <div class="product-card">
-        <!-- Женский товар -->
-        <img src="https://raw.githubusercontent.com/XonRe/telegram-mini-app/main/images/top-female.jpg" alt="Топ для женщин">
-        <p>самая покупаемая женская вещь у НАС</p>
-      </div>
-      <div class="product-card">
-        <!-- Мужской товар -->
-        <img src="https://raw.githubusercontent.com/XonRe/telegram-mini-app/main/images/top-male.jpg" alt="Топ для мужчин">
-        <p>самая покупаемая мужская вещь у НАС</p>
+      <div class="featured-products">
+        <div class="product-card">
+          <img src="https://raw.githubusercontent.com/XonRe/telegram-mini-app/main/images/top_female.jpg">
+          <p>самая покупаемая женская вещь у НАС</p>
+        </div>
+        <div class="product-card">
+          <img src="https://raw.githubusercontent.com/XonRe/telegram-mini-app/main/images/top_male.jpg">
+          <p>самая покупаемая мужская вещь у НАС</p>
+        </div>
       </div>
     </div>
   </div>
