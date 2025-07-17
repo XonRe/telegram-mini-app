@@ -1,31 +1,24 @@
-/* body{
-         color: var(--tg-theme-text-color);
-         background: var(--tg-theme-bg-color);
-         display: flex;
-         flex-direction: column;
-         align-items: center;
-         font-size: 18px;
-      }
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 20px;
+}
 
-      .hint{
-         color: var(--tg-theme-hint-color);
-      }
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
 
-      .link{
-         color: var(--tg-theme-link-color);
-      }
+button:hover {
+  background: #0056b3;
+}
 
-      .button{
-         background: var(--tg-theme-button-color);
-         color: var(--tg-theme-button-text-color);
-         border: none;
-         font-size: 18px;
-      }
-
-      .button:not(:last-child){
-         margin-bottom: 20px
-      }
-
-      #usercard{
-         text-align: center;
-      } */
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}

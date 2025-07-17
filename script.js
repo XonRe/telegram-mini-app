@@ -1,57 +1,54 @@
-// let tg = window.Telegram.WebApp; //получаем объект webapp телеграма 
+// Данные (можно заменить на API или localStorage)
+const data = {
+  male: {
+    "Кроссовки": ["Nike Pegasus 37", "Adidas Ultraboost", "Puma RS-X"],
+    "Куртки": ["The North Face", "Columbia", "Patagonia"]
+  },
+  female: {
+    "Кроссовки": ["Nike Air Max", "Adidas NMD", "Reebok Classic"],
+    "Куртки": ["ZARA", "H&M", "Calvin Klein"]
+  }
+};
 
-//    tg.expand(); //расширяем на все окно  
+// 1. Выбор пола (index.html)
+function selectGender(gender) {
+  localStorage.setItem("gender", gender); // Сохраняем выбор
+  window.location.href = "category.html"; // Переходим к категориям
+}
 
-//    tg.MainButton.text = "Changed Text"; //изменяем текст кнопки 
-//    tg.MainButton.setText("Changed Text1"); //изменяем текст кнопки иначе
-//    tg.MainButton.textColor = "#F55353"; //изменяем цвет текста кнопки
-//    tg.MainButton.color = "#143F6B"; //изменяем цвет бэкграунда кнопки
-//    tg.MainButton.setParams({"color": "#143F6B"}); //так изменяются все параметры
+// 2. Загрузка категорий (category.html)
+if (window.location.pathname.includes("category.html")) {
+  const gender = localStorage.getItem("gender");
+  const title = document.getElementById("category-title");
+  const categoriesContainer = document.getElementById("categories");
 
-//    let btn = document.getElementById("btn"); //получаем кнопку скрыть/показать 
+  title.textContent = `Выберите категорию (${gender === "male" ? "Мужской" : "Женский"})`;
 
-//    btn.addEventListener('click', function(){ //вешаем событие на нажатие html-кнопки
-//       if (tg.MainButton.isVisible){ //если кнопка показана 
-//          tg.MainButton.hide() //скрываем кнопку 
-//       }
-//       else{ //иначе
-//          tg.MainButton.show() //показываем 
-//       }
-//    });
+  Object.keys(data[gender]).forEach(category => {
+    const button = document.createElement("button");
+    button.textContent = category;
+    button.onclick = () => selectCategory(category);
+    categoriesContainer.appendChild(button);
+  });
+}
 
-//    let btnED = document.getElementById("btnED"); //получаем кнопку активировать/деактивировать
-//    btnED.addEventListener('click', function(){ //вешаем событие на нажатие html-кнопки
-//       if (tg.MainButton.isActive){ //если кнопка показана 
-//          tg.MainButton.setParams({"color": "#E0FFFF"}); //меняем цвет
-//          tg.MainButton.disable() //скрываем кнопку 
-//       }
-//       else{ //иначе
-//          tg.MainButton.setParams({"color": "#143F6B"}); //меняем цвет
-//          tg.MainButton.enable() //показываем 
-//       }
-//    });
+function selectCategory(category) {
+  localStorage.setItem("category", category);
+  window.location.href = "models.html";
+}
 
-//    Telegram.WebApp.onEvent('mainButtonClicked', function(){
-//       tg.sendData("some string that we need to send"); 
-//       //при клике на основную кнопку отправляем данные в строковом виде
-//    });
+// 3. Загрузка моделей (models.html)
+if (window.location.pathname.includes("models.html")) {
+  const gender = localStorage.getItem("gender");
+  const category = localStorage.getItem("category");
+  const title = document.getElementById("models-title");
+  const modelsContainer = document.getElementById("models");
 
+  title.textContent = `${category} (${gender === "male" ? "Мужские" : "Женские"})`;
 
-//    let usercard = document.getElementById("usercard"); //получаем блок usercard 
-
-//    let profName = document.createElement('p'); //создаем параграф
-//    profName.innerText = `${tg.initDataUnsafe.user.first_name}
-//    ${tg.initDataUnsafe.user.last_name}
-//    ${tg.initDataUnsafe.user.username} (${tg.initDataUnsafe.user.language_code})`;
-//    //выдем имя, "фамилию", через тире username и код языка
-//    usercard.appendChild(profName); //добавляем 
-
-//    let userid = document.createElement('p'); //создаем еще параграф 
-//    userid.innerText = `${tg.initDataUnsafe.user.id}`; //показываем user_id
-//    usercard.appendChild(userid); //добавляем
-
-
-//    //работает только в attachment menu
-//    // let pic = document.createElement('img'); //создаем img
-//    // pic.src = tg.initDataUnsafe.user.photo_url; //задаём src 
-//    // usercard.appendChild(pic); //добавляем элемент в карточку 
+  data[gender][category].forEach(model => {
+    const item = document.createElement("div");
+    item.textContent = model;
+    modelsContainer.appendChild(item);
+  });
+}
