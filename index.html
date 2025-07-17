@@ -3,14 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Выбор пола</title>
+  <title>Магазин обуви</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h1>Выберите пол</h1>
-    <button onclick="selectGender('male')">Мужской</button>
-    <button onclick="selectGender('female')">Женский</button>
+    <h1>Добро пожаловать!</h1>
+    
+    <!-- Лучшие товары -->
+    <div class="featured">
+      <div class="featured-item male">
+        <img src="images/nike_pegasus.jpg" alt="Nike Pegasus 37">
+        <h3>Лучшее для мужчин</h3>
+        <p>Nike Pegasus 37</p>
+      </div>
+      <div class="featured-item female">
+        <img src="images/adidas_nmd.jpg" alt="Adidas NMD">
+        <h3>Лучшее для женщин</h3>
+        <p>Adidas NMD</p>
+      </div>
+    </div>
+
+    <!-- Выбор пола -->
+    <h2>Выберите пол</h2>
+    <div class="gender-buttons">
+      <button class="male-btn" onclick="selectGender('male')">Мужской</button>
+      <button class="female-btn" onclick="selectGender('female')">Женский</button>
+    </div>
+
+    <!-- Рандомный товар -->
+    <button class="random-btn" onclick="showRandomProduct()">🎲 Случайный выбор</button>
   </div>
   <script src="script.js"></script>
 </body>
