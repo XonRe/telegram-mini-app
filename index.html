@@ -5,28 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>МАЛЕНЬКИЙ МУК</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap');
+  </style>
 </head>
 <body>
-  <div class="main-screen">
-    <header>
+  <div class="main-container">
+    <header class="main-header">
       <h1>МАЛЕНЬКИЙ МУК</h1>
     </header>
 
-    <div class="cta-block">
-      <button class="start-btn" onclick="location.href='category.html'">начать выбирать товары</button>
+    <div class="cta-button">
+      <button onclick="location.href='category.html'">начать выбирать товары</button>
     </div>
 
+    <!-- ТОП-товары -->
     <div class="featured-products">
-      <div class="featured-card female">
-        <img src="images/top_female.jpg" alt="Топ для женщин">
+      <div class="product-card">
+        <!-- Женский товар -->
+        <img src="https://raw.githubusercontent.com/XonRe/telegram-mini-app/main/images/top-female.jpg" alt="Топ для женщин">
         <p>самая покупаемая женская вещь у НАС</p>
       </div>
-      <div class="featured-card male">
-        <img src="images/top_male.jpg" alt="Топ для мужчин">
+      <div class="product-card">
+        <!-- Мужской товар -->
+        <img src="https://raw.githubusercontent.com/XonRe/telegram-mini-app/main/images/top-male.jpg" alt="Топ для мужчин">
         <p>самая покупаемая мужская вещь у НАС</p>
       </div>
     </div>
   </div>
-  <script src="script.js"></script>
 </body>
 </html>
