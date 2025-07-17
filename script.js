@@ -140,3 +140,11 @@ if (window.location.pathname.includes("product.html")) {
     sizesContainer.appendChild(sizeBtn);
   });
 }
+
+// Для главной страницы
+if (window.location.pathname.endsWith("index.html")) {
+  // Можно добавить анимации или другие эффекты
+  console.log("Добро пожаловать в МАЛЕНЬКИЙ МУК!");
+}
+
+// Для страницы категорий (category.html) и остальных — оставляем предыдущую логику 

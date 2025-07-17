@@ -3,36 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Магазин обуви</title>
+  <title>МАЛЕНЬКИЙ МУК</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Добро пожаловать!</h1>
-    
-    <!-- Лучшие товары -->
-    <div class="featured">
-      <div class="featured-item male">
-        <img src="images/nike_pegasus.jpg" alt="Nike Pegasus 37">
-        <h3>Лучшее для мужчин</h3>
-        <p>Nike Pegasus 37</p>
-      </div>
-      <div class="featured-item female">
-        <img src="images/adidas_nmd.jpg" alt="Adidas NMD">
-        <h3>Лучшее для женщин</h3>
-        <p>Adidas NMD</p>
-      </div>
+  <div class="main-screen">
+    <header>
+      <h1>МАЛЕНЬКИЙ МУК</h1>
+    </header>
+
+    <div class="cta-block">
+      <button class="start-btn" onclick="location.href='category.html'">начать выбирать товары</button>
     </div>
 
-    <!-- Выбор пола -->
-    <h2>Выберите пол</h2>
-    <div class="gender-buttons">
-      <button class="male-btn" onclick="selectGender('male')">Мужской</button>
-      <button class="female-btn" onclick="selectGender('female')">Женский</button>
+    <div class="featured-products">
+      <div class="featured-card female">
+        <img src="images/top_female.jpg" alt="Топ для женщин">
+        <p>самая покупаемая женская вещь у НАС</p>
+      </div>
+      <div class="featured-card male">
+        <img src="images/top_male.jpg" alt="Топ для мужчин">
+        <p>самая покупаемая мужская вещь у НАС</p>
+      </div>
     </div>
-
-    <!-- Рандомный товар -->
-    <button class="random-btn" onclick="showRandomProduct()">🎲 Случайный выбор</button>
   </div>
   <script src="script.js"></script>
 </body>
